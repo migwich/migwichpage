@@ -88,20 +88,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     confirmButton.addEventListener('click', () => {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const classroom = document.getElementById('classroom').value;
-        const paymentMethod = paymentMethodInput.value;
-    
-        if (name && phone && classroom && paymentMethod) {
-            const message = `Nuevo pedido:\n\nNombre: ${name}\nCelular: ${phone}\nSalón: ${classroom}\nMétodo de Pago: ${paymentMethod}`;
-            const whatsappLink = `https://wa.me/573103513674?text=${encodeURIComponent(message)}`;
-    
-            window.location.href = whatsappLink;
-        } else {
-            alert('Por favor, complete todos los campos antes de confirmar.');
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const classroom = document.getElementById('classroom').value;
+    const paymentMethod = paymentMethodInput.value;
+
+    if (name && phone && classroom && paymentMethod) {
+        let cartDetails = '';
+        let totalCost = 0;
+
+        // Recorre el carrito y construye el detalle de los sándwiches
+        for (const [sabor, quantity] of Object.entries(cart)) {
+            cartDetails += `${sabor} - Cantidad: ${quantity}\n`;
+            totalCost += quantity * 2000;
         }
-    });
+
+        // Mensaje a enviar
+        const message = `Nuevo pedido:\n\nNombre: ${name}\nCelular: ${phone}\nSalón: ${classroom}\nMétodo de Pago: ${paymentMethod}\n\nDetalles del Carrito:\n${cartDetails}Total: $${totalCost}`;
+        const whatsappLink = `https://wa.me/573103513674?text=${encodeURIComponent(message)}`;
+
+        window.location.href = whatsappLink;
+    } else {
+        alert('Por favor, complete todos los campos antes de confirmar.');
+    }
+});
+
     
     checkoutButton.addEventListener('click', () => {
         checkoutSection.classList.remove('hidden');
